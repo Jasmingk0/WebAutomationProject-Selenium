@@ -82,5 +82,6 @@ public class SupportFuncs {
             return false;
         }
     }
+    public void getUrl(String url) { driver.get(url); }
 
 }

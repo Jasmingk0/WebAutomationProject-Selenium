@@ -1,4 +1,3 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -6,7 +5,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.SupportFuncs;
-
 import java.time.Duration;
 
 public class LoginTCs {
@@ -215,4 +213,5 @@ public class LoginTCs {
 
         Assert.assertFalse(actions.isElementPresent(errorMsg), "Error message is still displayed after page refresh.");
     }
+
 }
