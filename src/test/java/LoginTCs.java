@@ -21,6 +21,8 @@ public class LoginTCs {
     private final By inventoryContainer = By.id("inventory_container");
     private final By logoutButton = By.id("logout_sidebar_link");
     private final By menuButton = By.id("react-burger-menu-btn");
+    private final By errorMsgColor = By.cssSelector("h3[data-test='error']");
+    private final By errMsgContainerCcolor = By.cssSelector("div.error-message-container");
 
     @BeforeClass
     public void setUp() {
@@ -145,6 +147,25 @@ public class LoginTCs {
         currentUrl = driver.getCurrentUrl();
         Assert.assertTrue(currentUrl.contains("inventory.html"),
                 "User was not redirected to inventory page after re-login.");
+    }
+
+    @Test(description = "To verify the error message text and styling for invalid login.")
+    public void testErrorMessageStyling() {
+        actions.type(usernameField, "invalid_user");
+        actions.type(passwordField, "wrong_password");
+        actions.click(loginButton);
+
+        String errorText = actions.getText(errorMsgColor);
+        Assert.assertEquals(errorText, "Epic sadface: Username and password do not match any user in this service",
+                "Error message text does not match expected.");
+
+        String msgColor = actions.getCssValue(errorMsgColor, "color");
+        Assert.assertEquals(msgColor, "rgba(255, 255, 255, 1)",
+                "Error message text color does not match expected white color.");
+
+        String color = actions.getCssValue(errMsgContainerCcolor, "background-color");
+        Assert.assertEquals(color, "rgba(226, 35, 26, 1)",
+                "Error message color does not match expected red color.");
     }
 
 }
