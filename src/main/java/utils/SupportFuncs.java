@@ -3,7 +3,7 @@ package utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
+import org.openqa.selenium.NoSuchElementException;
 import java.io.File;
 
 /**
@@ -44,8 +44,7 @@ public class SupportFuncs {
 
     public void type(By by, String text) {
         clear(by);
-        findElement(by).sendKeys(text);
-    }
+        findElement(by).sendKeys(text);}
 
     public void clear(By by) {
         findElement(by).clear();
@@ -67,7 +66,21 @@ public class SupportFuncs {
         driver.manage().window().maximize();
     }
 
-    public String getCssValue(By locator, String property) {
-        return driver.findElement(locator).getCssValue(property);
+    public String getCssValue(By locator, String property) { return driver.findElement(locator).getCssValue(property);}
+
+    public void quit() { driver.quit();}
+
+    public String activeElementId() { return driver.switchTo().activeElement().getAttribute("id");}
+
+    public void refresh() { driver.navigate().refresh(); }
+
+    public boolean isElementPresent(By locator) {
+        try {
+            driver.findElement(locator);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
+
 }

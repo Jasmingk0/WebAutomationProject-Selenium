@@ -168,4 +168,51 @@ public class LoginTCs {
                 "Error message color does not match expected red color.");
     }
 
+    @Test (description = "To verify all required login page elements are displayed correctly.")
+    public void testLoginPageElementsVisibility() {
+        Assert.assertTrue(actions.isDisplayed(usernameField), "Username field is not displayed.");
+        Assert.assertTrue(actions.isDisplayed(passwordField), "Password field is not displayed.");
+        Assert.assertTrue(actions.isDisplayed(loginButton), "Login button is not displayed.");
+    }
+
+    @Test (description = "To verify that the password field masks input characters.")
+    public void testPasswordFieldMasking() {
+        actions.findElement(passwordField).sendKeys("secret_sauce");
+        String typeAttribute = actions.findElement(passwordField).getAttribute("type");
+        Assert.assertEquals(typeAttribute, "password", "Password field does not mask input characters.");
+    }
+
+    @Test (description = "To verify the login page displays correctly on smaller screen sizes.")
+    public void testResponsiveDesign() {
+        driver.manage().window().setSize(new org.openqa.selenium.Dimension(375, 667)); // iPhone 6/7/8 size
+        Assert.assertTrue(actions.isDisplayed(usernameField), "Username field is not displayed on small screen.");
+        Assert.assertTrue(actions.isDisplayed(passwordField), "Password field is not displayed on small screen.");
+        Assert.assertTrue(actions.isDisplayed(loginButton), "Login button is not displayed on small screen.");
+    }
+
+    @Test (description = "To verify the keyboard navigation (tab order) follows the specified sequence.")
+    public void testKeyboardNavigation() {
+        actions.findElement(usernameField).sendKeys("standard_user");
+        actions.findElement(usernameField).sendKeys(org.openqa.selenium.Keys.TAB);
+        String activeElementId = actions.activeElementId();
+        Assert.assertEquals(activeElementId, "password", "Tab order did not move to password field.");
+
+        actions.findElement(passwordField).sendKeys("secret_sauce");
+        actions.findElement(passwordField).sendKeys(org.openqa.selenium.Keys.TAB);
+        activeElementId = actions.activeElementId();
+        Assert.assertEquals(activeElementId, "login-button", "Tab order did not move to login button.");
+    }
+
+    @Test (description = "To verify the error message is cleared after a page refresh.")
+    public void testErrorMessageClearedOnRefresh() {
+        actions.type(usernameField, "invalid_user");
+        actions.type(passwordField, "wrong_password");
+        actions.click(loginButton);
+
+        Assert.assertTrue(actions.isDisplayed(errorMsg), "Error message is not displayed after invalid login.");
+
+        actions.refresh();
+
+        Assert.assertFalse(actions.isElementPresent(errorMsg), "Error message is still displayed after page refresh.");
+    }
 }
