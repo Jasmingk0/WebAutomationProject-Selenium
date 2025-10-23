@@ -37,7 +37,7 @@ public class ProductPageTCs {
         driver.quit();
     }*/
 
-    @Test(description = "To ensure all required information (name, image, description, price) is present on every product card.")
+    @Test(description = "To ensure all required information (name, image, description, price) is present on every product card correctly.")
     public void verifyProductInfo() {
         int productsCount = actions.getElementsSize(productNames);
         for (int i = 0; i < productsCount; i++) {
@@ -45,6 +45,10 @@ public class ProductPageTCs {
             Assert.assertTrue(actions.ElementsIsDisplayed(productImages, i), "Product image is missing for product index: " + i);
             Assert.assertTrue(actions.ElementsIsDisplayed(productDescriptions, i), "Product description is missing for product index: " + i);
             Assert.assertTrue(actions.ElementsIsDisplayed(productPrices, i), "Product price is missing for product index: " + i);
+            String nameText = actions.getElementsText(productNames, i).trim();
+            Assert.assertFalse(nameText.isEmpty(), "Product name text is empty for product index: " + i);
+            Assert.assertTrue(nameText.matches("^[A-Za-z0-9\\s'-]+$"),
+                    "Product name contains invalid characters or is corrupted: '" + nameText + "' at index " + i);
         }
     }
 

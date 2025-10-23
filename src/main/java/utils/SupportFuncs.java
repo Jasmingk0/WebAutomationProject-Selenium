@@ -1,14 +1,15 @@
 package utils;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Utility class that provides common reusable Selenium actions.
@@ -138,6 +139,67 @@ public class SupportFuncs {
     public void selectByVisibleText(By by, String text) {
         Select select = new Select(findElement(by));
         select.selectByVisibleText(text);
+    }
+
+    public void rightClick(By by) {
+        Actions action = new Actions(driver);
+        action.contextClick(findElement(by)).perform();
+    }
+
+    public void doubleclick(By by) {
+        Actions action = new Actions(driver);
+        action.doubleClick(findElement(by)).perform();
+    }
+
+    public void hoverOver(By by) {
+        Actions action = new Actions(driver);
+        action.moveToElement(findElement(by)).perform();
+    }
+
+    public void dragAndDrop(By source, By target) {
+        Actions actions = new Actions(driver);
+        actions.dragAndDrop(findElement(source), findElement(target)).perform();
+    }
+
+    public void takeScreenshot() {
+
+        String folderPath = "src/test/resources/screenshots/";
+
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+
+        String baseName = methodName + ".png";
+        File screenshotFile = new File(folderPath + baseName);
+
+        int counter = 1;
+        while (screenshotFile.exists()) {
+            screenshotFile = new File(folderPath + methodName + "(" + counter + ").png");
+            counter++;
+        }
+
+        File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(srcFile, screenshotFile);
+            System.out.println("Screenshot saved: " + screenshotFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void scrollToElement(By by) {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(findElement(by)).perform();
+    }
+
+    public void resetActions() {
+        ((RemoteWebDriver) driver).resetInputState();
+    }
+
+    public void switchToWindow(int tabIndex) {
+        driver.switchTo().window(driver.getWindowHandles().toArray()[tabIndex].toString());
+    }
+
+    public void closeCurrentTab() {
+        driver.close();
     }
 
 }
