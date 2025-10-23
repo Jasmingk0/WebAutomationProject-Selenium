@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.SupportFuncs;
@@ -11,6 +12,7 @@ import java.time.Duration;
 public class LoginTCs {
 
 
+    // Locators
     private final By usernameField = By.id("user-name");
     private final By passwordField = By.id("password");
     private final By loginButton = By.id("login-button");
@@ -20,6 +22,7 @@ public class LoginTCs {
     private final By menuButton = By.id("react-burger-menu-btn");
     private final By errorMsgColor = By.cssSelector("h3[data-test='error']");
     private final By errMsgContainerCcolor = By.cssSelector("div.error-message-container");
+    // Local variables
     WebDriver driver;
     SupportFuncs actions;
 
@@ -32,6 +35,11 @@ public class LoginTCs {
 
         // initialize actions AFTER driver is ready
         actions = new SupportFuncs(driver);
+    }
+
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
     }
 
     @Test(description = "Verify user can log in with valid credentials")
@@ -209,9 +217,7 @@ public class LoginTCs {
         actions.click(loginButton);
 
         Assert.assertTrue(actions.isDisplayed(errorMsg), "Error message is not displayed after invalid login.");
-
         actions.refresh();
-
         Assert.assertFalse(actions.isElementPresent(errorMsg), "Error message is still displayed after page refresh.");
     }
 

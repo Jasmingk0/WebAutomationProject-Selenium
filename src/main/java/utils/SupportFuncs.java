@@ -5,14 +5,16 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 
 /**
  * Utility class that provides common reusable Selenium actions.
- * Instead of duplicating methods in every test,
- * you can just create one instance of this class and call its methods.
+ * Instead of duplicating methods in every test.
  */
+
 public class SupportFuncs {
 
     private WebDriver driver;
@@ -38,6 +40,18 @@ public class SupportFuncs {
         return findElement(by).isDisplayed();
     }
 
+    public boolean ElementsIsDisplayed(By by, int index) {
+        return driver.findElements(by).get(index).isDisplayed();
+    }
+
+    public int getElementsSize(By by) {
+        return driver.findElements(by).size();
+    }
+
+    public String getElementsText(By by, int index) {
+        return driver.findElements(by).get(index).getText();
+    }
+
     public void upload(By by, String path) {
         clear(by);
         String userDir = System.getProperty("user.dir");
@@ -59,6 +73,10 @@ public class SupportFuncs {
 
     public WebElement findElement(By by) {
         return driver.findElement(by);
+    }
+
+    public WebElement findElements(By by, int index) {
+        return driver.findElements(by).get(index);
     }
 
     public void navigateTo(String url) {
@@ -102,10 +120,24 @@ public class SupportFuncs {
         return driver.getTitle();
     }
 
-    public void explicitWait(By by, java.time.Duration duration) {
-        org.openqa.selenium.support.ui.WebDriverWait wait = new org.openqa.selenium.support.ui.WebDriverWait(driver, duration);
+    public void waitUntilVisable(By by, java.time.Duration duration) {
+        WebDriverWait wait = new WebDriverWait(driver, duration);
         wait.until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 
+    public void selectByValue(By by, String value) {
+        Select select = new Select(findElement(by));
+        select.selectByValue(value);
+    }
+
+    public void select(By by, int index) {
+        Select select = new Select(findElement(by));
+        select.selectByIndex(index);
+    }
+
+    public void selectByVisibleText(By by, String text) {
+        Select select = new Select(findElement(by));
+        select.selectByVisibleText(text);
+    }
 
 }
