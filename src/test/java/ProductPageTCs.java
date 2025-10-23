@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.SupportFuncs;
+
 import java.time.Duration;
 
 public class ProductPageTCs {
@@ -18,14 +19,14 @@ public class ProductPageTCs {
         driver.manage().window().maximize();
         actions = new SupportFuncs(driver);
         driver.get("https://www.saucedemo.com/");
-        actions.type( By.id("user-name"), "standard_user");
-        actions.type( By.id("password"), "secret_sauce");
-        actions.click( By.id("login-button"));
+        actions.type(By.id("user-name"), "standard_user");
+        actions.type(By.id("password"), "secret_sauce");
+        actions.click(By.id("login-button"));
         // initialize actions AFTER driver is ready
 
     }
 
-    @Test (description = "To ensure all required information (name, image, description, price) is present on every product card.")
+    @Test(description = "To ensure all required information (name, image, description, price) is present on every product card.")
     public void verifyProductInfo() {
         By productNames = By.className("inventory_item_name");
         By productImages = By.className("inventory_item_img");
@@ -39,7 +40,6 @@ public class ProductPageTCs {
             Assert.assertTrue(driver.findElements(productPrices).get(i).isDisplayed(), "Product price is missing for product index: " + i);
         }
     }
-
 
 
 }

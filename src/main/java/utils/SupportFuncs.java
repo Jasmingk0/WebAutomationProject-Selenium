@@ -1,9 +1,11 @@
 package utils;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import java.io.File;
 
 /**
@@ -44,7 +46,8 @@ public class SupportFuncs {
 
     public void type(By by, String text) {
         clear(by);
-        findElement(by).sendKeys(text);}
+        findElement(by).sendKeys(text);
+    }
 
     public void clear(By by) {
         findElement(by).clear();
@@ -66,13 +69,21 @@ public class SupportFuncs {
         driver.manage().window().maximize();
     }
 
-    public String getCssValue(By locator, String property) { return driver.findElement(locator).getCssValue(property);}
+    public String getCssValue(By locator, String property) {
+        return driver.findElement(locator).getCssValue(property);
+    }
 
-    public void quit() { driver.quit();}
+    public void quit() {
+        driver.quit();
+    }
 
-    public String activeElementId() { return driver.switchTo().activeElement().getAttribute("id");}
+    public String activeElementId() {
+        return driver.switchTo().activeElement().getAttribute("id");
+    }
 
-    public void refresh() { driver.navigate().refresh(); }
+    public void refresh() {
+        driver.navigate().refresh();
+    }
 
     public boolean isElementPresent(By locator) {
         try {
@@ -82,6 +93,19 @@ public class SupportFuncs {
             return false;
         }
     }
-    public void getUrl(String url) { driver.get(url); }
+
+    public void getUrl(String url) {
+        driver.get(url);
+    }
+
+    public String getTitle() {
+        return driver.getTitle();
+    }
+
+    public void explicitWait(By by, java.time.Duration duration) {
+        org.openqa.selenium.support.ui.WebDriverWait wait = new org.openqa.selenium.support.ui.WebDriverWait(driver, duration);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
 
 }

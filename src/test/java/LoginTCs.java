@@ -5,12 +5,11 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.SupportFuncs;
+
 import java.time.Duration;
 
 public class LoginTCs {
 
-    WebDriver driver;
-    SupportFuncs actions;
 
     private final By usernameField = By.id("user-name");
     private final By passwordField = By.id("password");
@@ -21,6 +20,8 @@ public class LoginTCs {
     private final By menuButton = By.id("react-burger-menu-btn");
     private final By errorMsgColor = By.cssSelector("h3[data-test='error']");
     private final By errMsgContainerCcolor = By.cssSelector("div.error-message-container");
+    WebDriver driver;
+    SupportFuncs actions;
 
     @BeforeClass
     public void setUp() {
@@ -116,7 +117,7 @@ public class LoginTCs {
     @Test(description = "verify the performance_glitch_user can log in successfully.")
     public void testPerformanceGlitchUserLogin() {
         actions.type(usernameField, "performance_glitch_user");
-        actions.type(passwordField,"secret_sauce");
+        actions.type(passwordField, "secret_sauce");
         actions.click(loginButton);
         String currentUrl = driver.getCurrentUrl();
         Assert.assertTrue(currentUrl.contains("inventory.html"),
@@ -166,21 +167,21 @@ public class LoginTCs {
                 "Error message color does not match expected red color.");
     }
 
-    @Test (description = "To verify all required login page elements are displayed correctly.")
+    @Test(description = "To verify all required login page elements are displayed correctly.")
     public void testLoginPageElementsVisibility() {
         Assert.assertTrue(actions.isDisplayed(usernameField), "Username field is not displayed.");
         Assert.assertTrue(actions.isDisplayed(passwordField), "Password field is not displayed.");
         Assert.assertTrue(actions.isDisplayed(loginButton), "Login button is not displayed.");
     }
 
-    @Test (description = "To verify that the password field masks input characters.")
+    @Test(description = "To verify that the password field masks input characters.")
     public void testPasswordFieldMasking() {
         actions.findElement(passwordField).sendKeys("secret_sauce");
         String typeAttribute = actions.findElement(passwordField).getAttribute("type");
         Assert.assertEquals(typeAttribute, "password", "Password field does not mask input characters.");
     }
 
-    @Test (description = "To verify the login page displays correctly on smaller screen sizes.")
+    @Test(description = "To verify the login page displays correctly on smaller screen sizes.")
     public void testResponsiveDesign() {
         driver.manage().window().setSize(new org.openqa.selenium.Dimension(375, 667)); // iPhone 6/7/8 size
         Assert.assertTrue(actions.isDisplayed(usernameField), "Username field is not displayed on small screen.");
@@ -188,7 +189,7 @@ public class LoginTCs {
         Assert.assertTrue(actions.isDisplayed(loginButton), "Login button is not displayed on small screen.");
     }
 
-    @Test (description = "To verify the keyboard navigation (tab order) follows the specified sequence.")
+    @Test(description = "To verify the keyboard navigation (tab order) follows the specified sequence.")
     public void testKeyboardNavigation() {
         actions.findElement(usernameField).sendKeys("standard_user");
         actions.findElement(usernameField).sendKeys(org.openqa.selenium.Keys.TAB);
@@ -201,7 +202,7 @@ public class LoginTCs {
         Assert.assertEquals(activeElementId, "login-button", "Tab order did not move to login button.");
     }
 
-    @Test (description = "To verify the error message is cleared after a page refresh.")
+    @Test(description = "To verify the error message is cleared after a page refresh.")
     public void testErrorMessageClearedOnRefresh() {
         actions.type(usernameField, "invalid_user");
         actions.type(passwordField, "wrong_password");
@@ -213,5 +214,6 @@ public class LoginTCs {
 
         Assert.assertFalse(actions.isElementPresent(errorMsg), "Error message is still displayed after page refresh.");
     }
+
 
 }
