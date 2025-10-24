@@ -25,6 +25,16 @@ public class SupportFuncs {
         this.driver = driver;
     }
 
+    public void login(UserType user) {
+        By usernameLocator = By.id("user-name");
+        By passwordLocator = By.id("password");
+        By loginButtonLocator = By.id("login-button");
+        String username = UserFactory.getUsername(user);
+        type(usernameLocator, username);
+        type(passwordLocator, "secret_sauce");
+        click(loginButtonLocator);
+    }
+
     public String getDomProperty(By by, String property) {
         return findElement(by).getDomProperty(property);
     }
@@ -72,6 +82,10 @@ public class SupportFuncs {
         findElement(by).click();
     }
 
+    public void clickOnElementFromList(By by, int index) {
+        driver.findElements(by).get(index).click();
+    }
+
     public WebElement findElement(By by) {
         return driver.findElement(by);
     }
@@ -86,6 +100,26 @@ public class SupportFuncs {
 
     public void maximize() {
         driver.manage().window().maximize();
+    }
+
+    public void addAllProductsToCart(By products, By addButton, By backToProductsButton) {
+        int productsCount = getElementsSize(products);
+        // First add all products to cart
+        for (int i = 0; i < productsCount; i++) {
+            clickOnElementFromList(products, i);
+            click(addButton);
+            click(backToProductsButton);
+        }
+    }
+
+    public void removeAllProductsFromCart(By products, By removeButton, By backToProductsButton) {
+        int productsCount = getElementsSize(products);
+        // Then remove all products from cart
+        for (int i = 0; i < productsCount; i++) {
+            clickOnElementFromList(products, i);
+            click(removeButton);
+            click(backToProductsButton);
+        }
     }
 
     public String getCssValue(By locator, String property) {
@@ -202,4 +236,27 @@ public class SupportFuncs {
         driver.close();
     }
 
+    public void switchToFrame(By by) {
+        driver.switchTo().frame(findElement(by));
+    }
+
+    public void alertAccept() {
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+    }
+
+    public void alertDismiss() {
+        Alert alert = driver.switchTo().alert();
+        alert.dismiss();
+    }
+
+    public void alertGetText() {
+        Alert alert = driver.switchTo().alert();
+        System.out.println("Alert text: " + alert.getText());
+    }
+
+    public void alertEnterText(String text) {
+        Alert alert = driver.switchTo().alert();
+        alert.sendKeys(text);
+    }
 }
