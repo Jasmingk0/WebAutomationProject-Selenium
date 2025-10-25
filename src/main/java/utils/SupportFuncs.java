@@ -259,4 +259,41 @@ public class SupportFuncs {
         Alert alert = driver.switchTo().alert();
         alert.sendKeys(text);
     }
+
+    public void assertFieldIsEmpty(By locator) {
+        String value = driver.findElement(locator).getAttribute("value").trim();
+        assert value.isEmpty() : " field is not cleared .";
+    }
+
+    public void assertFieldIsNotEmpty(By locator) {
+        String value = driver.findElement(locator).getAttribute("value").trim();
+        assert !value.isEmpty() : " field is cleared .";
+    }
+
+    public void assertIsDisplayed(By locator) {
+        boolean isDisplayed = driver.findElement(locator).isDisplayed();
+        assert isDisplayed : " element is not displayed .";
+    }
+
+    public void assertIsNotDisplayed(By locator) {
+        boolean isDisplayed = driver.findElement(locator).isDisplayed();
+        assert !isDisplayed : " element is displayed .";
+    }
+
+    public void assertUrlEquals(String expectedUrl) {
+        String currentUrl = driver.getCurrentUrl();
+        assert currentUrl.equals(expectedUrl) : "URL does not match the expected URL.";
+    }
+
+    public void switchToNewTab() {
+        String originalHandle = driver.getWindowHandle();
+        for (String handle : driver.getWindowHandles()) {
+            if (!handle.equals(originalHandle)) {
+                driver.switchTo().window(handle);
+                break;
+            }
+        }
+    }
+
+
 }
